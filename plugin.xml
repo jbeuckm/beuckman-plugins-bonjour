@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="beuckman-plugins-bonjour" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <name>BonjourServer</name>
+    
+    <js-module name="BonjourServer" src="www/BonjourServer.js">
+        <clobbers target="bonjour_server" />
+    </js-module>
+
+
+    <platform name="ios">
+        
+        <config-file target="config.xml" parent="/*">
+            <feature name="BonjourServer">
+                <param name="ios-package" value="BonjourServer" />
+            </feature>
+        </config-file>
+
+        <pod name="GCDWebServer" />
+        
+        <header-file src="src/ios/BonjourServer.h" />
+        <source-file src="src/ios/BonjourServer.m" />
+
+        <dependency id="cordova-plugin-cocoapod-support"/>
+        
+    </platform>
+
+
+</plugin>
