@@ -3,10 +3,16 @@
 #import "GCDWebServerDataResponse.h"
     
 @interface BonjourServer : CDVPlugin {
-    
-      GCDWebServer* _webServer;
+    GCDWebServer* _webServer;
+
+    dispatch_semaphore_t serverWait;
+    NSString *serverResponse;
 }
 
-- (void) echo:(CDVInvokedUrlCommand *)command;
+- (void) startServer:(CDVInvokedUrlCommand *)command;
+- (void) stopServer:(CDVInvokedUrlCommand *)command;
+- (void) setRequestHandler:(CDVInvokedUrlCommand *)command;
+- (void) setResponseString:(CDVInvokedUrlCommand *)command;
+- (void) sendResponse:(CDVInvokedUrlCommand *)command;
 
 @end

@@ -11,5 +11,5 @@
     "url": "git+ssh://git@bitbucket.org/usbmpi/cordovabonjourserver.git"
   },
   "author": "Joe Beuckman <joebeuckman@gmail.com>",
-  "license": "MIT",
+  "license": "MIT"
 }

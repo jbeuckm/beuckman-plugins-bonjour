@@ -1,38 +1,60 @@
 #import "BonjourServer.h"
 
-@implementation BonjourServer 
-
-- (void) echo:(CDVInvokedUrlCommand *)command {
+@implementation BonjourServer
     
-    CDVPluginResult* pluginResult = nil;
-    NSString* echo = [command.arguments objectAtIndex:0];
+- (void)pluginInitialize {
+    _webServer = [[GCDWebServer alloc] init];
+}
 
-    if (echo != nil && [echo length] > 0) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
-    } else {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-    }
+- (void) startServer:(CDVInvokedUrlCommand *)command {
+    
+    NSString* port = [command.arguments objectAtIndex:0];        
+    NSString* bonjourName = [command.arguments objectAtIndex:1];        
+  
+  // Start server on port 8080
+  [_webServer startWithPort:[port intValue] bonjourName:bonjourName];
+    
+  NSLog(@"Visit %@ in your web browser", _webServer.serverURL);
+    
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    
-        
-    
-    _webServer = [[GCDWebServer alloc] init];
+
+}
+
+
+- (void) setRequestHandler:(CDVInvokedUrlCommand *)command {
   
   // Add a handler to respond to GET requests on any URL
   [_webServer addDefaultHandlerForMethod:@"GET"
                             requestClass:[GCDWebServerRequest class]
                             processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request) {
     
+//                                dispatch_semaphore_wait(serverWait, DISPATCH_TIME_FOREVER);
+                                
     return [GCDWebServerDataResponse responseWithHTML:@"<html><body><p>Hello World</p></body></html>"];
+//    return [GCDWebServerDataResponse responseWithHTML:serverResponse];
     
   }];
-  
-  // Start server on port 8080
-  [_webServer startWithPort:8080 bonjourName:@"it's me"];
-  NSLog(@"Visit %@ in your web browser", _webServer.serverURL);
     
+}
+
+- (void) setResponseString:(CDVInvokedUrlCommand *)command {
     
+    serverResponse = [command.arguments objectAtIndex:0];
+
+}
+
+
+- (void) sendResponse:(CDVInvokedUrlCommand *)command {
+
+    serverResponse = [command.arguments objectAtIndex:0];
+
+//    dispatch_semaphore_signal(dispatch_semaphore_wait);
+}
+
+- (void) stopServer:(CDVInvokedUrlCommand *)command {
+    [_webServer stop];
 }
 
 @end
