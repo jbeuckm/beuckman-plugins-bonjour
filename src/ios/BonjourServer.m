@@ -10,15 +10,22 @@
     
     NSString* port = [command.arguments objectAtIndex:0];        
     NSString* bonjourName = [command.arguments objectAtIndex:1];        
-  
-  // Start server on port 8080
-  [_webServer startWithPort:[port intValue] bonjourName:bonjourName];
+      
+  [_webServer addDefaultHandlerForMethod:@"GET"
+                            requestClass:[GCDWebServerRequest class]
+                            processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request) {
     
+    return [GCDWebServerDataResponse responseWithHTML:serverResponse];
+    
+  }];
+
+  [_webServer startWithPort:[port intValue] bonjourName:bonjourName];
+
   NSLog(@"Visit %@ in your web browser", _webServer.serverURL);
     
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 
 }
 
